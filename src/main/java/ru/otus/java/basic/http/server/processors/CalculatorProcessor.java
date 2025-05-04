@@ -8,17 +8,22 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public class CalculatorProcessor implements RequestProcessor {
+    private int getParameterAsInt(HttpRequest request, String parameterName) {
+        if (!request.containsParameter(parameterName)) {
+            throw new BadRequestException("INCORRECT_REQUEST_DATA", String.format("Отсутствует параметр запроса '%s'", parameterName));
+        }
+        final var parameterValue = request.getParameter(parameterName);
+        try {
+            return Integer.parseInt(parameterValue);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("400", String.format("Can`t parse to int, parameter.name: '%s', parameter.value: '%s'", parameterName, parameterValue));
+        }
+    }
+
     @Override
     public void execute(HttpRequest request, OutputStream output) throws IOException {
-        if (!request.containsParameter("a")) {
-            throw new BadRequestException("INCORRECT_REQUEST_DATA", "Отсутствует параметр запроса 'a'");
-        }
-        if (!request.containsParameter("b")) {
-            throw new BadRequestException("INCORRECT_REQUEST_DATA", "Отсутствует параметр запроса 'b'");
-        }
-
-        int a = Integer.parseInt(request.getParameter("a"));
-        int b = Integer.parseInt(request.getParameter("b"));
+        int a = getParameterAsInt(request, "a");
+        int b = getParameterAsInt(request, "b");
 
         String response = "" +
                 "HTTP/1.1 200 OK\r\n" +
