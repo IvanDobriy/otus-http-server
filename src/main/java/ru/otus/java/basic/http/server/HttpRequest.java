@@ -26,6 +26,10 @@ public class HttpRequest {
         return method + " " + uri;
     }
 
+    public boolean containsParameter(String key) {
+        return parameters.containsKey(key);
+    }
+
     public String getParameter(String key) {
         return parameters.get(key);
     }
@@ -40,7 +44,6 @@ public class HttpRequest {
         int startIndex = rawRequest.indexOf(' ');
         int endIndex = rawRequest.indexOf(' ', startIndex + 1);
         this.method = HttpMethod.valueOf(rawRequest.substring(0, startIndex));
-
         this.uri = rawRequest.substring(startIndex + 1, endIndex);
         if (uri.contains("?")) {
             String[] elements = uri.split("[?]");
