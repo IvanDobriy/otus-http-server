@@ -62,7 +62,7 @@ public class Dispatcher {
             ErrorDto errorDto = new ErrorDto("500", e.getMessage());
             String errorDtoJson = gson.toJson(errorDto);
             String response = "" +
-                    "HTTP/1.1 500 Bad Request\r\n" +
+                    "HTTP/1.1 500 Internal server error\r\n" +
                     "Content-Type: application/json\r\n" +
                     "\r\n" + errorDtoJson;
             output.write(response.getBytes(StandardCharsets.UTF_8));
