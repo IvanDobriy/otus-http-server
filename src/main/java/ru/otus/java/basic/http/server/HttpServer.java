@@ -1,9 +1,14 @@
 package ru.otus.java.basic.http.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class HttpServer {
+    private final Logger logger = LogManager.getLogger(this.getClass());
     private int port;
     private Dispatcher dispatcher;
 
@@ -14,13 +19,13 @@ public class HttpServer {
 
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Сервер запущен на порту: " + port);
+            logger.info("Сервер запущен на порту: " + port);
             while (true) {
                 try (Socket socket = serverSocket.accept()) {
                     byte[] buffer = new byte[8192];
                     int n = socket.getInputStream().read(buffer);
                     if (n < 0) {
-                        System.out.println("Получено битое сообщение");
+                        logger.warn("Получено битое сообщение");
                         continue;
                     }
                     String rawRequest = new String(buffer, 0, n);
@@ -30,7 +35,7 @@ public class HttpServer {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Found some unhandled exception: {}, stack trace: {}", e.getMessage(), Arrays.asList(e.getStackTrace()));
         }
     }
 }

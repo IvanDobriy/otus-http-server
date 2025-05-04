@@ -1,7 +1,5 @@
 package ru.otus.java.basic.http.server.application;
 
-import ru.otus.java.basic.http.server.exceptions.BadRequestException;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
